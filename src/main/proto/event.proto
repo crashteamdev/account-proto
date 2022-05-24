@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package subscription.event;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "SubscriptionEventProto";
+option java_package = "dev.crashteam.subscription.event";
+
+message SubscriptionChange {
+  oneof change {
+    SubscriptionCreated subscription_created = 1;
+    SubscriptionModify subscription_modify = 2;
+  }
+}
+
+message SubscriptionCreated {
+  string name = 1;
+  string description = 2;
+  int64 price = 3;
+  int32 level = 4;
+}
+
+message AccountSubscriptionChange {
+  string from_sub_id = 2;
+  string to_sub_id = 3;
+}
+
+message SubscriptionModify {
+  string name = 1;
+  string description = 2;
+  int64 price = 3;
+  int32 level = 4;
+}
+
+message SubscriptionEvent {
+  google.protobuf.Timestamp created_at = 10;
+  message EventSource {
+    oneof source {
+      string sub_id = 1;
+      string user_id = 2;
+    }
+  }
+  EventSource event_source = 11;
+  message EventPayload {
+    oneof payload {
+      SubscriptionChange subscription_change = 1;
+      AccountSubscriptionChange account_subscription_change = 2;
+    }
+  }
+  EventPayload payload = 12;
+}

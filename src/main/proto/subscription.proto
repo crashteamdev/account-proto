@@ -1,0 +1,214 @@
+syntax = "proto3";
+
+package subscription;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "SubscriptionProto";
+option java_package = "dev.crashteam.subscription";
+
+message AccountSubscription {
+  string user_id = 1;
+  Subscription subscription = 2;
+  google.protobuf.Timestamp valid_until = 3;
+}
+
+message Subscription {
+  int32 sub_id = 1;
+  int64 price = 2;
+  string name = 3;
+  string description = 4;
+  int32 level = 5;
+}
+
+message AllSubscriptionResponse {
+  repeated Subscription plan = 1;
+}
+
+// Add account subscription request
+message AddAccountSubscriptionRequest {
+  string user_id = 1;
+  string sub_id = 2;
+}
+
+message AddAccountSubscriptionResponse {
+  oneof response {
+    SuccessAddAccountResponse success_response = 1;
+    ErrorAddAccountResponse error_response = 2;
+  }
+}
+
+message SuccessAddAccountResponse {
+  string subscription_id = 1;
+}
+
+message ErrorAddAccountResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    ALREADY_EXISTS = 1;
+    BAD_REQUEST_PARAMS = 2;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+// Remove account subscription request
+message RemoveAccountSubscriptionRequest {
+  string user_id = 1;
+  string sub_id = 2;
+}
+
+message RemoveAccountSubscriptionResponse {
+  oneof response {
+    SuccessRemoveAccountSubscriptionResponse success_response = 1;
+    ErrorRemoveAccountResponse error_response = 2;
+  }
+}
+
+message SuccessRemoveAccountSubscriptionResponse {
+  string user_id = 1;
+  string sub_id = 2;
+}
+
+message ErrorRemoveAccountResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    BAD_REQUEST_PARAMS = 1;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+// Upgrade account subscription request
+message UpgradeAccountSubscriptionRequest {
+  string user_id = 1;
+  string from_sub_id = 2;
+  string to_sub_id = 3;
+}
+
+message UpgradeAccountSubscriptionResponse {
+  oneof response {
+    google.protobuf.Empty success_response = 1;
+    ErrorUpgradeAccountSubscriptionResponse error_response = 2;
+  }
+}
+
+message SuccessUpgradeAccountSubscriptionResponse {
+  string user_id = 1;
+  Subscription subscription = 2;
+}
+
+message ErrorUpgradeAccountSubscriptionResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    BAD_REQUEST_PARAMS = 1;
+    TOO_LOW_LEVEL = 2;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+
+// Get subscription Request
+message GetSubscriptionRequest {
+  oneof value {
+    string sub_id = 1;
+    string name = 2;
+  }
+}
+
+message SuccessGetSubscriptionResponse {
+  AccountSubscription plan = 1;
+}
+
+message ErrorGetSubscriptionResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    NOT_FOUND = 1;
+    BAD_REQUEST_PARAMS = 2;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+message GetSubscriptionResponse {
+  oneof response {
+    SuccessGetSubscriptionResponse success_response = 1;
+    ErrorGetSubscriptionResponse error_response = 2;
+  }
+}
+
+// Create subscription request
+message CreateSubscriptionRequest {
+  string name = 1;
+  string description = 2;
+  int64 price = 3;
+  int32 level = 4;
+}
+
+message CreateSubscriptionResponse {
+  oneof response {
+    SuccessCreateSubscriptionResponse success_response = 1;
+    ErrorCreateSubscriptionResponse error_response = 2;
+  }
+}
+
+message SuccessCreateSubscriptionResponse {
+  string sub_id = 1;
+}
+
+message ErrorCreateSubscriptionResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    ALREADY_EXISTS = 1;
+    BAD_REQUEST_PARAMS = 2;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+// Modify subscription request
+message ModifySubscriptionRequest {
+  string sub_id = 1;
+  message ModifyField {
+    string name = 1;
+    string description = 2;
+    int64 price = 3;
+    int32 level = 4;
+  }
+  ModifyField modify_field = 2;
+}
+
+message ModifySubscriptionResponse {
+  oneof response {
+    SuccessCreateSubscriptionResponse success_response = 1;
+    ErrorCreateSubscriptionResponse error_response = 2;
+  }
+}
+
+message SuccessModifySubscriptionResponse {
+  Subscription subscription = 1;
+}
+
+message ErrorModifySubscriptionResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    ALREADY_EXISTS = 1;
+    BAD_REQUEST_PARAMS = 2;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+service SubscriptionService {
+  rpc createSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc modifySubscription(ModifySubscriptionRequest) returns (ModifySubscriptionResponse);
+  rpc createAccountSubscription(AddAccountSubscriptionRequest) returns (AddAccountSubscriptionResponse);
+  rpc removeAccountSubscription(RemoveAccountSubscriptionRequest) returns (RemoveAccountSubscriptionResponse);
+  rpc upgradeAccountSubscription(UpgradeAccountSubscriptionRequest) returns (UpgradeAccountSubscriptionRequest);
+  rpc getAccountSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+  rpc getAllSubscription(google.protobuf.Empty) returns (AllSubscriptionResponse);
+}
+
