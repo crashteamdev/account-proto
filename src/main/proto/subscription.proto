@@ -28,25 +28,25 @@ message AllSubscriptionResponse {
   repeated Subscription plan = 1;
 }
 
-// Add account subscription request
-message AddAccountSubscriptionRequest {
+// Set account subscription request
+message SetAccountSubscriptionRequest {
   string user_id = 1;
   string sub_id = 2;
   google.protobuf.Timestamp valid_until = 3;
 }
 
-message AddAccountSubscriptionResponse {
+message SetAccountSubscriptionResponse {
   oneof response {
-    SuccessAddAccountResponse success_response = 1;
-    ErrorAddAccountResponse error_response = 2;
+    SuccessSetAccountResponse success_response = 1;
+    ErrorSetAccountResponse error_response = 2;
   }
 }
 
-message SuccessAddAccountResponse {
+message SuccessSetAccountResponse {
   string subscription_id = 1;
 }
 
-message ErrorAddAccountResponse {
+message ErrorSetAccountResponse {
   enum ErrorCode {
     UNEXPECTED_ERROR = 0;
     ALREADY_EXISTS = 1;
@@ -207,7 +207,7 @@ message ErrorModifySubscriptionResponse {
 service SubscriptionService {
   rpc createSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
   rpc modifySubscription(ModifySubscriptionRequest) returns (ModifySubscriptionResponse);
-  rpc createAccountSubscription(AddAccountSubscriptionRequest) returns (AddAccountSubscriptionResponse);
+  rpc setAccountSubscription(SetAccountSubscriptionRequest) returns (SetAccountSubscriptionResponse);
   rpc removeAccountSubscription(RemoveAccountSubscriptionRequest) returns (RemoveAccountSubscriptionResponse);
   rpc upgradeAccountSubscription(UpgradeAccountSubscriptionRequest) returns (UpgradeAccountSubscriptionRequest);
   rpc getAccountSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
