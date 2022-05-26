@@ -65,7 +65,7 @@ message RemoveAccountSubscriptionRequest {
 message RemoveAccountSubscriptionResponse {
   oneof response {
     SuccessRemoveAccountSubscriptionResponse success_response = 1;
-    ErrorRemoveAccountResponse error_response = 2;
+    ErrorRemoveAccountSubscriptionResponse error_response = 2;
   }
 }
 
@@ -74,7 +74,7 @@ message SuccessRemoveAccountSubscriptionResponse {
   string sub_id = 2;
 }
 
-message ErrorRemoveAccountResponse {
+message ErrorRemoveAccountSubscriptionResponse {
   enum ErrorCode {
     UNEXPECTED_ERROR = 0;
     BAD_REQUEST_PARAMS = 1;
