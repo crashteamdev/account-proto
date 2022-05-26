@@ -17,7 +17,7 @@ message AccountSubscription {
 }
 
 message Subscription {
-  int32 sub_id = 1;
+  string sub_id = 1;
   int64 price = 2;
   string name = 3;
   string description = 4;
