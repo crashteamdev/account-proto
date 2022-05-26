@@ -185,8 +185,8 @@ message ModifySubscriptionRequest {
 
 message ModifySubscriptionResponse {
   oneof response {
-    SuccessCreateSubscriptionResponse success_response = 1;
-    ErrorCreateSubscriptionResponse error_response = 2;
+    SuccessModifySubscriptionResponse success_response = 1;
+    ErrorModifySubscriptionResponse error_response = 2;
   }
 }
 
