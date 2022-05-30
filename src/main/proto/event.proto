@@ -3,6 +3,7 @@ syntax = "proto3";
 package subscription.event;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 option java_multiple_files = true;
 option java_outer_classname = "SubscriptionEventProto";
@@ -28,10 +29,10 @@ message AccountSubscriptionChange {
 }
 
 message SubscriptionModify {
-  string name = 1;
-  string description = 2;
-  int64 price = 3;
-  int32 level = 4;
+  google.protobuf.StringValue name = 1;
+  google.protobuf.StringValue description = 2;
+  google.protobuf.Int64Value price = 3;
+  google.protobuf.Int32Value level = 4;
 }
 
 message SubscriptionEvent {
