@@ -36,6 +36,7 @@ message SubscriptionModify {
 }
 
 message SubscriptionEvent {
+  string event_id = 1;
   google.protobuf.Timestamp created_at = 10;
   message EventSource {
     oneof source {
