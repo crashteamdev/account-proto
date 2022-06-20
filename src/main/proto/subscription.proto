@@ -51,6 +51,7 @@ message ErrorSetAccountResponse {
     UNEXPECTED_ERROR = 0;
     ALREADY_EXISTS = 1;
     BAD_REQUEST_PARAMS = 2;
+    NOT_ENOUGH_CREDIT = 3;
   }
   ErrorCode code = 1;
   string description = 2;
@@ -107,6 +108,7 @@ message ErrorUpgradeAccountSubscriptionResponse {
     UNEXPECTED_ERROR = 0;
     BAD_REQUEST_PARAMS = 1;
     TOO_LOW_LEVEL = 2;
+    NOT_ENOUGH_CREDIT = 3;
   }
   ErrorCode code = 1;
   string description = 2;
