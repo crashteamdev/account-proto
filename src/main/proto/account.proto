@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package account;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AccountProto";
+option java_package = "dev.crashteam.account";
+
+message Account {
+  string user_id = 1;
+  string email = 2;
+  bool blocked = 3;
+}
+
+message AccountInfoRequest {
+  string user_id = 1;
+}
+
+message AccountInfoResponse {
+  oneof response {
+    SuccessAccountInfoResponse success_response = 1;
+    ErrorAccountInfoResponse error_response = 2;
+  }
+}
+
+message SuccessAccountInfoResponse {
+  Account account = 1;
+}
+
+message ErrorAccountInfoResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    USER_NOT_FOUND = 1;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+service AccountService {
+  rpc getAccountInfo(AccountInfoRequest) returns (AccountInfoResponse);
+}
