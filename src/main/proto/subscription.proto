@@ -10,29 +10,46 @@ option java_multiple_files = true;
 option java_outer_classname = "SubscriptionProto";
 option java_package = "dev.crashteam.subscription";
 
-message AccountSubscription {
-  string user_id = 1;
-  Subscription subscription = 2;
+message AccountProduct {
+  message ProductInfo {
+    string product_id = 1;
+    string name = 2;
+  }
+  ProductInfo product = 1;
+  message SubscriptionInfo {
+    string subscription_id = 1;
+    string name = 2;
+    int32 level = 3;
+  }
+  SubscriptionInfo subscription = 2;
   google.protobuf.Timestamp valid_until = 3;
 }
 
+message Product {
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  repeated Subscription subscriptions = 4;
+}
+
 message Subscription {
-  string sub_id = 1;
+  string subscription_id = 1;
   int64 price = 2;
   string name = 3;
   string description = 4;
   int32 level = 5;
 }
 
-message AllSubscriptionResponse {
+message GetAllSubscriptionResponse {
   repeated Subscription plan = 1;
 }
 
 // Set account subscription request
 message SetAccountSubscriptionRequest {
   string user_id = 1;
-  string sub_id = 2;
-  google.protobuf.Timestamp valid_until = 3;
+  string product_id = 2;
+  string subscription_id = 3;
+  google.protobuf.Timestamp valid_until = 4;
 }
 
 message SetAccountSubscriptionResponse {
@@ -60,7 +77,8 @@ message ErrorSetAccountResponse {
 // Remove account subscription request
 message RemoveAccountSubscriptionRequest {
   string user_id = 1;
-  string sub_id = 2;
+  string product_id = 2;
+  string subscription_id = 3;
 }
 
 message RemoveAccountSubscriptionResponse {
@@ -72,7 +90,7 @@ message RemoveAccountSubscriptionResponse {
 
 message SuccessRemoveAccountSubscriptionResponse {
   string user_id = 1;
-  string sub_id = 2;
+  string subscription_id = 2;
 }
 
 message ErrorRemoveAccountSubscriptionResponse {
@@ -87,8 +105,9 @@ message ErrorRemoveAccountSubscriptionResponse {
 // Upgrade account subscription request
 message UpgradeAccountSubscriptionRequest {
   string user_id = 1;
-  string from_sub_id = 2;
-  string to_sub_id = 3;
+  string product_id = 2;
+  string from_subscription_id = 3;
+  string to_subscription_id = 4;
 }
 
 message UpgradeAccountSubscriptionResponse {
@@ -115,19 +134,17 @@ message ErrorUpgradeAccountSubscriptionResponse {
 }
 
 
-// Get subscription Request
-message GetSubscriptionRequest {
-  oneof value {
-    string sub_id = 1;
-    string name = 2;
-  }
+// Get account subscription request
+message GetAccountSubscriptionRequest {
+  string user_id = 1;
 }
 
-message SuccessGetSubscriptionResponse {
-  AccountSubscription plan = 1;
+message SuccessGetAccountSubscriptionResponse {
+  string user_id = 1;
+  repeated AccountProduct account_products = 2;
 }
 
-message ErrorGetSubscriptionResponse {
+message ErrorGetAccountSubscriptionResponse {
   enum ErrorCode {
     UNEXPECTED_ERROR = 0;
     NOT_FOUND = 1;
@@ -137,19 +154,20 @@ message ErrorGetSubscriptionResponse {
   string description = 2;
 }
 
-message GetSubscriptionResponse {
+message GetAccountSubscriptionResponse {
   oneof response {
-    SuccessGetSubscriptionResponse success_response = 1;
-    ErrorGetSubscriptionResponse error_response = 2;
+    SuccessGetAccountSubscriptionResponse success_response = 1;
+    ErrorGetAccountSubscriptionResponse error_response = 2;
   }
 }
 
 // Create subscription request
 message CreateSubscriptionRequest {
-  string name = 1;
-  string description = 2;
-  int64 price = 3;
-  int32 level = 4;
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  int64 price = 4;
+  int32 level = 5;
 }
 
 message CreateSubscriptionResponse {
@@ -160,7 +178,7 @@ message CreateSubscriptionResponse {
 }
 
 message SuccessCreateSubscriptionResponse {
-  string sub_id = 1;
+  string subscription_id = 1;
 }
 
 message ErrorCreateSubscriptionResponse {
@@ -175,7 +193,8 @@ message ErrorCreateSubscriptionResponse {
 
 // Modify subscription request
 message ModifySubscriptionRequest {
-  string sub_id = 1;
+  string product_id = 3;
+  string subscription_id = 1;
   message ModifyField {
     google.protobuf.StringValue name = 1;
     google.protobuf.StringValue description = 2;
@@ -206,13 +225,44 @@ message ErrorModifySubscriptionResponse {
   string description = 2;
 }
 
+// Get subscription request
+message GetSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message GetSubscriptionResponse {
+  oneof response {
+    SuccessGetSubscriptionResponse success_response = 1;
+    ErrorGetSubscriptionResponse error_response = 2;
+  }
+}
+
+message SuccessGetSubscriptionResponse {
+  Product product = 1;
+  Subscription subscription = 2;
+}
+
+message ErrorGetSubscriptionResponse {
+  enum ErrorCode {
+    UNEXPECTED_ERROR = 0;
+    NOT_FOUND = 1;
+  }
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+message GetAllSubscriptionRequest {
+  string product_id = 1;
+}
+
 service SubscriptionService {
   rpc createSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
   rpc modifySubscription(ModifySubscriptionRequest) returns (ModifySubscriptionResponse);
+  rpc getSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
   rpc setAccountSubscription(SetAccountSubscriptionRequest) returns (SetAccountSubscriptionResponse);
   rpc removeAccountSubscription(RemoveAccountSubscriptionRequest) returns (RemoveAccountSubscriptionResponse);
   rpc upgradeAccountSubscription(UpgradeAccountSubscriptionRequest) returns (UpgradeAccountSubscriptionRequest);
-  rpc getAccountSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
-  rpc getAllSubscription(google.protobuf.Empty) returns (AllSubscriptionResponse);
+  rpc getAccountSubscription(GetAccountSubscriptionRequest) returns (GetAccountSubscriptionResponse);
+  rpc getAllSubscription(GetAllSubscriptionRequest) returns (GetAllSubscriptionResponse);
 }
 
