@@ -259,7 +259,7 @@ service SubscriptionService {
   rpc createSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
   rpc modifySubscription(ModifySubscriptionRequest) returns (ModifySubscriptionResponse);
   rpc getSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
-  rpc setAccountSubscription(SetAccountSubscriptionRequest) returns (SetAccountSubscriptionResponse);
+  rpc addAccountSubscription(SetAccountSubscriptionRequest) returns (SetAccountSubscriptionResponse);
   rpc removeAccountSubscription(RemoveAccountSubscriptionRequest) returns (RemoveAccountSubscriptionResponse);
   rpc upgradeAccountSubscription(UpgradeAccountSubscriptionRequest) returns (UpgradeAccountSubscriptionRequest);
   rpc getAccountSubscription(GetAccountSubscriptionRequest) returns (GetAccountSubscriptionResponse);
