@@ -41,7 +41,7 @@ message Subscription {
 }
 
 message GetAllSubscriptionResponse {
-  repeated Subscription plan = 1;
+  repeated Product product = 1;
 }
 
 // Add account subscription request
