@@ -44,12 +44,12 @@ message GetAllSubscriptionResponse {
   repeated Subscription plan = 1;
 }
 
-// Set account subscription request
+// Add account subscription request
 message AddAccountSubscriptionRequest {
   string user_id = 1;
   string product_id = 2;
   string subscription_id = 3;
-  google.protobuf.Timestamp valid_until = 4;
+  int32 period = 4; // month count
 }
 
 message AddAccountSubscriptionResponse {
