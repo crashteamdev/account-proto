@@ -41,6 +41,10 @@ message Subscription {
 }
 
 message GetAllSubscriptionResponse {
+  repeated Subscription subscription = 1;
+}
+
+message GetAllProductResponse {
   repeated Product product = 1;
 }
 
@@ -264,5 +268,6 @@ service SubscriptionService {
   rpc upgradeAccountSubscription(UpgradeAccountSubscriptionRequest) returns (UpgradeAccountSubscriptionRequest);
   rpc getAccountSubscription(GetAccountSubscriptionRequest) returns (GetAccountSubscriptionResponse);
   rpc getAllSubscription(GetAllSubscriptionRequest) returns (GetAllSubscriptionResponse);
+  rpc getAllProduct(google.protobuf.Empty) returns (GetAllProductResponse);
 }
 
