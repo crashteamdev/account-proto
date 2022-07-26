@@ -16,6 +16,7 @@ message Account {
   repeated subscription.AccountProduct products = 4;
 }
 
+// Get Account info request
 message AccountInfoRequest {
   string user_id = 1;
 }

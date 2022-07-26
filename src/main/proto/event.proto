@@ -53,3 +53,25 @@ message SubscriptionEvent {
   }
   EventPayload payload = 12;
 }
+
+message AccountEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  message EventSource {
+    oneof source {
+      string user_id = 1;
+    }
+  }
+  EventSource event_source = 3;
+  message EventPayload {
+    string type = 1;
+    string realmId = 2;
+    string clientId = 3;
+    string sessionId = 4;
+    string ipAddress = 5;
+    string error = 6;
+    map<string, string> details = 7;
+  }
+  EventPayload payload = 4;
+
+}
