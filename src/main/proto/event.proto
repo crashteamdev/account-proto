@@ -69,7 +69,7 @@ message AccountEvent {
     string clientId = 3;
     string sessionId = 4;
     string ipAddress = 5;
-    string error = 6;
+    google.protobuf.StringValue error = 6;
     map<string, string> details = 7;
   }
   EventPayload payload = 4;
