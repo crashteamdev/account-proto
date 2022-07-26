@@ -54,6 +54,20 @@ message SubscriptionEvent {
   EventPayload payload = 12;
 }
 
+// Account event
+message AccountCreated {
+  string email = 1;
+  string enabled = 2;
+}
+
+message AccountUpdated {
+  string email = 1;
+  string enabled = 2;
+}
+
+message AccountDeleted {
+}
+
 message AccountEvent {
   string event_id = 1;
   google.protobuf.Timestamp created_at = 2;
@@ -64,13 +78,11 @@ message AccountEvent {
   }
   EventSource event_source = 3;
   message EventPayload {
-    string type = 1;
-    string realmId = 2;
-    string clientId = 3;
-    string sessionId = 4;
-    string ipAddress = 5;
-    google.protobuf.StringValue error = 6;
-    map<string, string> details = 7;
+    oneof payload {
+      AccountCreated account_created = 1;
+      AccountUpdated account_updated = 2;
+      AccountDeleted account_deleted = 3;
+    }
   }
   EventPayload payload = 4;
 
