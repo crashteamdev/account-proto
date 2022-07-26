@@ -57,12 +57,12 @@ message SubscriptionEvent {
 // Account event
 message AccountCreated {
   string email = 1;
-  string enabled = 2;
+  bool enabled = 2;
 }
 
 message AccountUpdated {
   string email = 1;
-  string enabled = 2;
+  bool enabled = 2;
 }
 
 message AccountDeleted {
